@@ -1,0 +1,86 @@
+using MigrantsTransferTrackerDAL;
+using System;
+using System.Collections.Generic;
+
+namespace MigrantsTransferTrackerBLL          //DO NOT change the namespace name
+{
+    public class MigrantsTransferService    //DO NOT change the class name
+    {
+        //Create public fields here
+        public MigrantsTransferDAO migrantsTransferDAO;
+
+       
+
+        public MigrantsTransferService()
+        {
+            //Instantiate the fields here
+        }
+
+        public bool Validate(MigrantsTransfer migrantsTransfer, out string validationError)
+        {
+            bool IsValid = true;
+            validationError = "";
+
+            //Implement code here. 
+            //Do not change method signature
+            if( migrantsTransfer.TransferDate > DateTime.Today)
+            {
+                validationError = "TransferDate cannot be a future date";
+                IsValid = false;
+            }
+            if(migrantsTransfer.fromState==null || migrantsTransfer.fromState=="")
+            {
+                validationError = "FromState is required";
+                    IsValid = false;
+            }
+            if (migrantsTransfer.toState == null || migrantsTransfer.toState == "")
+            {
+                validationError = "ToState is required";
+                IsValid = false;
+            }
+            if (migrantsTransfer.fromState == migrantsTransfer.toState)
+            {
+                validationError = "FromState and ToState cannot be same";
+                IsValid = false;
+
+            }
+            if (migrantsTransfer.noOfMigrantsTransfered < 0)
+            {
+                validationError = "Invalid value for NoOfMigrantsTransfered";
+                IsValid = false;
+            }
+
+            return IsValid;
+        }
+      
+        public bool AddNewTransfer(MigrantsTransfer migrantsTransfer)
+        {
+            bool IsAdded = false;
+            //Implement code here. 
+            //Do not change method signature
+            MigrantsTransferDAO mtd = new MigrantsTransferDAO();
+            if (Validate(migrantsTransfer))
+            {
+                try
+                {
+                    int i =mtd.AddTransferDetails(migrantsTransfer.transferDate, migrantsTransfer.fromState, migrantsTransfer.toState, migrantsTransfer.noOfMigrantsTransfered, migrantsTransfer.transferMode, migrantsTransfer.vehicleDetails);
+                    IsAdded = true;
+                }
+                catch (Exception e)
+                {
+                    
+                    throw new MigrantsTransferValidationException(e);
+                }
+            }
+            return IsAdded;
+        }
+       
+        public Dictionary<string, long> GetTransferHistory(string fromState, DateTime fromDate, DateTime toDate)
+        {
+            Dictionary<string, long> TransferHistory = null;
+            //Implement code here. 
+            //Do not change method signature
+            return TransferHistory;
+        }
+    }
+}

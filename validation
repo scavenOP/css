@@ -1,0 +1,15 @@
+using System;
+
+namespace MigrantsTransferTrackerBLL        //DO NOT change the namespace name
+{
+    public class MigrantsTransferValidationException : Exception      //DO NOT change the class name
+    {
+        //Implement the code here
+        public MigrantsTransferValidationException(string message) : base(message)
+        {
+
+        }
+
+    }
+}
+
